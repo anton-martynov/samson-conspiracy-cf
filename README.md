@@ -1,5 +1,7 @@
 # Samson Conspiracy как Control Surface в Ableton Live
 
+![Samson Conspiracy](images/square.jpg)
+
 ## Что сделано
 1. Транспорт (PLAY, STOP, RECORD)
 2. Микшер
