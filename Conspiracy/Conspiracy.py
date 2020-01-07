@@ -21,6 +21,9 @@ class Conspiracy(ControlSurface):
             self._create_transport()
             self._create_mixer()
 
+            self._session.set_mixer(self._mixer)
+            self.set_highlighting_session_component(self._session)
+
         logger.info('Surface initialized')
 
     def _create_session(self):
@@ -43,7 +46,7 @@ class Conspiracy(ControlSurface):
             ]
             self._matrix.add_row(row)
 
-        self._session = SessionComponent(session_width, session_height, name='Session_Control', auto_name=True)
+        self._session = SessionComponent(session_width, session_height, name='Session_Control', auto_name=True, enable_skinning=True)
         self._session.set_clip_launch_buttons(self._matrix)
         self._session.set_scene_launch_buttons(self._scene_launch_buttons)
 

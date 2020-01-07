@@ -5,7 +5,7 @@ from _Framework.ButtonElement import ButtonElement, Skin
 from _Framework.EncoderElement import EncoderElement
 from _Framework.InputControlElement import MIDI_NOTE_TYPE, MIDI_CC_TYPE
 from .Colors import TransportButtonColors
-from .Skins import LaunchClipPadSkin
+from .Skins import LaunchClipPadSkin, LaunchScenePadSkin
 
 
 class TransportButton(ButtonElement):
@@ -59,25 +59,11 @@ class LaunchScenePad(ButtonElement):
     """ Pad to launch scene (right (5th) column of pads 05, 10, 15, 20, 25) """
 
     def __init__(self, identifier, *a, **k):
-        ButtonElement.__init__(self, True, MIDI_NOTE_TYPE, 0, identifier, *a, **k)
+        ButtonElement.__init__(self, True, MIDI_NOTE_TYPE, 0, identifier, Skin(LaunchScenePadSkin), *a, **k)
 
 
 class LaunchClipPad(ButtonElement):
     """ Pad to launch clip """
 
     def __init__(self, identifier, *a, **k):
-        ButtonElement.__init__(self, True, MIDI_NOTE_TYPE, 0, identifier, *a, **k)
-
-        self._log = logging.getLogger('LaunchClipPad-' + str(identifier))
-
-    def set_light(self, value):
-        self._log.info('set_light: ' + str(value))
-        ButtonElement.set_light(self, value)
-
-    def turn_on(self):
-        self._log.info('set_on')
-        ButtonElement.turn_on(self)
-
-    def turn_off(self):
-        self._log.info('set_off')
-        ButtonElement.turn_off(self)
+        ButtonElement.__init__(self, True, MIDI_NOTE_TYPE, 0, identifier, Skin(LaunchClipPadSkin), *a, **k)
