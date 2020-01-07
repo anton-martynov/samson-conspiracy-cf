@@ -57,9 +57,9 @@ class Conspiracy(ControlSurface):
 
     def _create_transport(self):
         self._transport = TransportComponent()
-        self._transport.set_play_button(TransportButton(self, 38, 5))
-        self._transport.set_stop_button(TransportButton(self, 39))
-        self._transport.set_record_button(TransportButton(self, 40, 5))
+        self._transport.set_play_button(TransportButton(self, 38))
+        self._transport.set_stop_button(TransportButton(self, 39, False))
+        self._transport.set_record_button(TransportButton(self, 40))
 
         logger.info('Transport elements created')
 
