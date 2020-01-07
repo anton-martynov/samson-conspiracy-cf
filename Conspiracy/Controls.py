@@ -1,9 +1,11 @@
 import Live
+import logging
 
-from _Framework.ButtonElement import ButtonElement
+from _Framework.ButtonElement import ButtonElement, Skin
 from _Framework.EncoderElement import EncoderElement
 from _Framework.InputControlElement import MIDI_NOTE_TYPE, MIDI_CC_TYPE
-from .Colors import TransportButtonColors, PadColors
+from .Colors import TransportButtonColors
+from .Skins import LaunchClipPadSkin
 
 
 class TransportButton(ButtonElement):
@@ -14,7 +16,6 @@ class TransportButton(ButtonElement):
 
         self._surface = surface
         self._refresh_after_release = refresh_after_release
-
         self._is_on = False
 
         if refresh_after_release:
@@ -67,46 +68,16 @@ class LaunchClipPad(ButtonElement):
     def __init__(self, identifier, *a, **k):
         ButtonElement.__init__(self, True, MIDI_NOTE_TYPE, 0, identifier, *a, **k)
 
+        self._log = logging.getLogger('LaunchClipPad-' + str(identifier))
 
-class LaunchScenePadSkin:
-    class Session:
-        ClipStopped = PadColors.OFF
-        ClipStarted = PadColors.GREEN
-        ClipRecording = PadColors.RED
-        ClipTriggeredPlay = PadColors.YELLOW
-        ClipTriggeredRecord = PadColors.LIGHTBLUE
-        ClipEmpty = PadColors.OFF
-        Scene = PadColors.OFF
-        SceneTriggered = PadColors.YELLOW
-        NoScene = PadColors.OFF
-        StopClip = PadColors.OFF
-        StopClipTriggered = PadColors.YELLOW
-        RecordButton = PadColors.OFF
+    def set_light(self, value):
+        self._log.info('set_light: ' + str(value))
+        ButtonElement.set_light(self, value)
 
-    class Zooming:
-        Selected = PadColors.PURPLE
-        Stopped = PadColors.RED
-        Playing = PadColors.GREEN
-        Empty = PadColors.OFF
+    def turn_on(self):
+        self._log.info('set_on')
+        ButtonElement.turn_on(self)
 
-
-class LaunchClipPadSkin:
-    class Session:
-        ClipStopped = PadColors.OFF
-        ClipStarted = PadColors.GREEN
-        ClipRecording = PadColors.RED
-        ClipTriggeredPlay = PadColors.YELLOW
-        ClipTriggeredRecord = PadColors.LIGHTBLUE
-        ClipEmpty = PadColors.OFF
-        Scene = PadColors.OFF
-        SceneTriggered = PadColors.YELLOW
-        NoScene = PadColors.OFF
-        StopClip = PadColors.OFF
-        StopClipTriggered = PadColors.YELLOW
-        RecordButton = PadColors.OFF
-
-    class Zooming:
-        Selected = PadColors.PURPLE
-        Stopped = PadColors.RED
-        Playing = PadColors.GREEN
-        Empty = PadColors.OFF
+    def turn_off(self):
+        self._log.info('set_off')
+        ButtonElement.turn_off(self)
