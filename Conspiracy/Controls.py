@@ -39,7 +39,8 @@ class TransportButton(ButtonElement):
         return self._is_on
 
     def __value_listener(self, value):
-        self._surface.schedule_message(self._refresh_time, self.__update_led_state)
+        if value < 1:  # # note off
+            self._surface.schedule_message(self._refresh_time, self.__update_led_state)
 
     def __update_led_state(self):
         if self._is_on:
@@ -61,16 +62,17 @@ class XFader(Slider):
 
 
 class LaunchScenePad(ButtonElement):
-    """ Pad to launch scene (one from right (5th) column of pads 05, 10, 15, 20, 25) """
+    """ Pad to launch scene (right (5th) column of pads 05, 10, 15, 20, 25) """
 
     def __init__(self, identifier, *a, **k):
         ButtonElement.__init__(self, True, MIDI_NOTE_TYPE, 0, identifier, Skin(LaunchScenePadSkin), *a, **k)
 
-    def turn_on(self):
-        self.send_value(2)  # green
 
-    def turn_off(self):
-        self.send_value(0)  # black, off
+class LaunchClipPad(ButtonElement):
+    """ Pad to launch clip """
+
+    def __init__(self, identifier, *a, **k):
+        ButtonElement.__init__(self, True, MIDI_NOTE_TYPE, 0, identifier, Skin(LaunchClipPadSkin), *a, **k)
 
 
 class PadColors:
@@ -85,6 +87,28 @@ class PadColors:
 
 
 class LaunchScenePadSkin:
+    class Session:
+        ClipStopped = PadColors.OFF
+        ClipStarted = PadColors.GREEN
+        ClipRecording = PadColors.RED
+        ClipTriggeredPlay = PadColors.YELLOW
+        ClipTriggeredRecord = PadColors.LIGHTBLUE
+        ClipEmpty = PadColors.OFF
+        Scene = PadColors.OFF
+        SceneTriggered = PadColors.YELLOW
+        NoScene = PadColors.OFF
+        StopClip = PadColors.OFF
+        StopClipTriggered = PadColors.YELLOW
+        RecordButton = PadColors.OFF
+
+    class Zooming:
+        Selected = PadColors.PURPLE
+        Stopped = PadColors.RED
+        Playing = PadColors.GREEN
+        Empty = PadColors.OFF
+
+
+class LaunchClipPadSkin:
     class Session:
         ClipStopped = PadColors.OFF
         ClipStarted = PadColors.GREEN

@@ -3,7 +3,7 @@ from _Framework.TransportComponent import TransportComponent
 from _Framework.MixerComponent import MixerComponent
 from _Framework.SessionComponent import SessionComponent
 from _Framework.ButtonMatrixElement import ButtonMatrixElement
-from .Controls import TransportButton, XFader, Slider, LaunchScenePad
+from .Controls import TransportButton, XFader, Slider, LaunchScenePad, LaunchClipPad
 
 import logging
 
@@ -36,8 +36,22 @@ class Conspiracy(ControlSurface):
         ]
         self._scene_launch_buttons = ButtonMatrixElement(name='Scene_Launch_Buttons', rows=[self._scene_launch_buttons])
 
+        self._matrix = ButtonMatrixElement(name='Button_Matrix')
+        for scene_index in xrange(session_height):
+            row = [
+                LaunchClipPad(scene_index * 5 + track_index, name='%d_Clip_%d_Button' % (track_index, scene_index)) for track_index in xrange(session_width)
+            ]
+            self._matrix.add_row(row)
+
         self._session = SessionComponent(session_width, session_height, name='Session_Control', auto_name=True)
+        self._session.set_clip_launch_buttons(self._matrix)
         self._session.set_scene_launch_buttons(self._scene_launch_buttons)
+
+        for scene_index in xrange(session_height):
+            scene = self._session.scene(scene_index)
+            for track_index in xrange(session_width):
+                clip_slot = scene.clip_slot(track_index)
+                clip_slot.name = '%d_Clip_Slot_%d' % (track_index, scene_index)
 
         logger.info('Session created')
 
