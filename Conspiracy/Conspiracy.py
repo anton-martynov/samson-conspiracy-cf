@@ -32,7 +32,7 @@ class Conspiracy(ControlSurface):
         logger.info('Surface initialized')
 
     def _create_controls(self):
-        self._shift_button = TransportButton(self, 40, False, resource_type=PrioritizedResource, name='Shift_Button')
+        self._shift_button = TransportButton(self, 40, resource_type=PrioritizedResource, name='Shift_Button')
         self._left_button = NavButton(34, name='Bank_Select_Left_Button')
         self._right_button = NavButton(36, name='Bank_Select_Right_Button')
         self._up_button = NavButton(35, name='Bank_Select_Up_Button')
@@ -58,6 +58,8 @@ class Conspiracy(ControlSurface):
         self._session = SessionComponent(self._session_width, self._session_height, name='Session_Control', auto_name=True, enable_skinning=True)
         self._session.set_clip_launch_buttons(self._matrix)
         self._session.set_scene_launch_buttons(self._scene_launch_buttons)
+
+        self._session.set_
         self._session.set_track_bank_left_button(self._left_button)
         self._session.set_track_bank_right_button(self._right_button)
         self._session.set_scene_bank_up_button(self._up_button)
