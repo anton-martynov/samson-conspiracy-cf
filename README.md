@@ -4,23 +4,20 @@
 
 ## Что сделано
 1. Транспорт (PLAY, STOP)
-> RECORD используется как Shift
+    - RECORD планируется использовать как Shift
 2. Микшер
     - XFader (crossfader) управляет Master Volume
     - Слайдеры S1 - S4 управляют балансом треков 1 - 4
     - Энкодеры P1 - P4 управляют громкостью треков 1 - 4
     - Слайдеры S5, S6 управляют громкостью return-треков
 3. Сессия 
-    - RECORD планируется использовать как Shift
     - Стрелки управляют перемещением сессии по трекам (left, right) и сценам (up, down)
     - Пэды, правый столбец (05, 10, 15, 20, 25) - Launch Scene
     - Пэды, 5 строк * 4 столбца, управляют запуском клипов 
     
 ## Установка скрипта в Ableton Live
 ### Windows
-Закрыть Ableton Live. 
-Скопировать каталог Conspiracy в каталог `%AbletonLive_InstallPath%\Resources\MIDI Remote Scripts`. 
-Запустить Ableton Live. 
+Скопировать каталог `Conspiracy` в каталог `%AbletonLive_InstallPath%\Resources\MIDI Remote Scripts`. 
 
 ## Настройка MIDI-параметров в контроллере
 ### Transport
