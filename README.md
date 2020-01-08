@@ -95,16 +95,16 @@
 ### F-кнопки
 | Кнопка | Канал | Note/CC | Значение | Нота  | Тип       |
 | ------ | -----:| ------- | --------:| ----- | --------- |
-| F1     |     1 | Note    |          |       | Momentary |
-| F2     |     1 | Note    |          |       | Momentary |
-| F3     |     1 | Note    |          |       | Momentary |
-| F4     |     1 | Note    |          |       | Momentary |
-| F5     |     1 | Note    |          |       | Momentary |
-| F6     |     1 | Note    |          |       | Momentary |
-| F7     |     1 | Note    |          |       | Momentary |
-| F8     |     1 | Note    |          |       | Momentary |
-| F9     |     1 | Note    |          |       | Momentary |
-| F10    |     1 | Note    |          |       | Momentary |
+| F1     |     1 | Note    |       25 | C# 0  | Momentary |
+| F2     |     1 | Note    |       26 | D  0  | Momentary |
+| F3     |     1 | Note    |       27 | D# 0  | Momentary |
+| F4     |     1 | Note    |       28 | E  0  | Momentary |
+| F5     |     1 | Note    |       29 | F  0  | Momentary |
+| F6     |     1 | Note    |       30 | F# 0  | Momentary |
+| F7     |     1 | Note    |       31 | G  0  | Momentary |
+| F8     |     1 | Note    |       32 | G# 0  | Momentary |
+| F9     |     1 | Note    |       33 | A  0  | Momentary |
+| F10    |     1 | Note    |       41 | F  1  | Momentary |
 
 У этих кнопок четыре цвета: 
 - 0, чёрный (выключенный)
