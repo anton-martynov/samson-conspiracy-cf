@@ -3,6 +3,7 @@ from _Framework.TransportComponent import TransportComponent
 from _Framework.MixerComponent import MixerComponent
 from _Framework.SessionComponent import SessionComponent
 from _Framework.ButtonMatrixElement import ButtonMatrixElement
+from _Framework.Resource import PrioritizedResource
 from .Controls import TransportButton, XFader, Slider, LaunchScenePad, LaunchClipPad, NavButton
 
 import logging
@@ -31,7 +32,7 @@ class Conspiracy(ControlSurface):
         logger.info('Surface initialized')
 
     def _create_controls(self):
-        # self._shift_button = make_button(0, 98, resource_type=PrioritizedResource, name='Shift_Button')
+        self._shift_button = TransportButton(self, 40, False, resource_type=PrioritizedResource, name='Shift_Button')
         self._left_button = NavButton(34, name='Bank_Select_Left_Button')
         self._right_button = NavButton(36, name='Bank_Select_Right_Button')
         self._up_button = NavButton(35, name='Bank_Select_Up_Button')
@@ -74,7 +75,7 @@ class Conspiracy(ControlSurface):
         self._transport = TransportComponent()
         self._transport.set_play_button(TransportButton(self, 38))
         self._transport.set_stop_button(TransportButton(self, 39, False))
-        self._transport.set_record_button(TransportButton(self, 40))
+        # self._transport.set_record_button(TransportButton(self, 40))
 
         logger.info('Transport elements created')
 
