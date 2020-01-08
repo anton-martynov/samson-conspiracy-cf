@@ -41,6 +41,19 @@ class TransportButton(ButtonElement):
                 self.turn_on()
 
 
+class NavButton(ButtonElement):
+    """ Four navigation buttons: left, right, up, down Available colors: 0 - off, black; 1 - blue """
+
+    def __init__(self, identifier, *a, **k):
+        ButtonElement.__init__(self, True, MIDI_NOTE_TYPE, 0, identifier, *a, **k)
+
+    def turn_on(self):
+        self.send_value(TransportButtonColors.BLUE.midi_value)
+
+    def turn_off(self):
+        self.send_value(TransportButtonColors.OFF.midi_value)
+
+
 class Slider(EncoderElement):
     """ Sliders S1 .. S6 """
 
