@@ -1,4 +1,4 @@
-from .Colors import PadColors
+from .colors import PadColors, FButtonColors
 
 
 class LaunchScenePadSkin:
@@ -43,3 +43,9 @@ class LaunchClipPadSkin:
         Stopped = PadColors.RED
         Playing = PadColors.GREEN
         Empty = PadColors.OFF
+
+
+class FButtonSkin:
+    class Session:
+        StopClip = FButtonColors.OFF
+        StopClipTriggered = FButtonColors.YELLOW

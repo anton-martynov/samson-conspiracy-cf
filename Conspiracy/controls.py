@@ -4,8 +4,8 @@ import logging
 from _Framework.ButtonElement import ButtonElement, Skin
 from _Framework.EncoderElement import EncoderElement
 from _Framework.InputControlElement import MIDI_NOTE_TYPE, MIDI_CC_TYPE
-from .Colors import TransportButtonColors
-from .Skins import LaunchClipPadSkin, LaunchScenePadSkin
+from .colors import TransportButtonColors
+from .skins import LaunchClipPadSkin, LaunchScenePadSkin, FButtonSkin
 
 
 class TransportButton(ButtonElement):
@@ -61,6 +61,12 @@ class Slider(EncoderElement):
         super(Slider, self).__init__(MIDI_CC_TYPE, 0, identifier, Live.MidiMap.MapMode.absolute, *a, **k)
 
 
+class Encoder(EncoderElement):
+    """ Encoders/knobs E1-E8 """
+    def __init__(self, identifier, *a, **k):
+        super(Encoder, self).__init__(MIDI_CC_TYPE, 0, identifier, Live.MidiMap.MapMode.absolute, *a, **k)
+
+
 class XFader(Slider):
     """ Crossfader """
 
@@ -80,3 +86,10 @@ class LaunchClipPad(ButtonElement):
 
     def __init__(self, identifier, *a, **k):
         ButtonElement.__init__(self, True, MIDI_NOTE_TYPE, 0, identifier, Skin(LaunchClipPadSkin), *a, **k)
+
+
+class FButton(ButtonElement):
+    """ F-buttons """
+
+    def __init__(self, identifier, *a, **k):
+        ButtonElement.__init__(self, True, MIDI_NOTE_TYPE, 0, identifier, Skin(FButtonSkin), *a, **k)

@@ -1,5 +1,5 @@
 from _Framework.Capabilities import *
-from .Conspiracy import Conspiracy
+from .conspiracy import Conspiracy
 
 
 def create_instance(c_instance):
@@ -11,6 +11,6 @@ def get_capabilities():
         CONTROLLER_ID_KEY: controller_id(model_name='Samson Conspiracy'),
         PORTS_KEY: [
             inport(props=[NOTES_CC, REMOTE, SCRIPT]),
-            outport(props=[NOTES_CC, REMOTE, SCRIPT])
+            outport(props=[REMOTE, SCRIPT])
         ]
     }
