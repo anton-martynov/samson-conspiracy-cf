@@ -59,7 +59,6 @@ class Conspiracy(ControlSurface):
         self._session.set_clip_launch_buttons(self._matrix)
         self._session.set_scene_launch_buttons(self._scene_launch_buttons)
 
-        self._session.set_
         self._session.set_track_bank_left_button(self._left_button)
         self._session.set_track_bank_right_button(self._right_button)
         self._session.set_scene_bank_up_button(self._up_button)
