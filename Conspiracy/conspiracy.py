@@ -106,7 +106,7 @@ class Conspiracy(ControlSurface):
         logger.info('Transport elements created')
 
     def _create_mixer(self):
-        self._mixer = MixerComponent(4, 2)  # 4 tracks, 2 returns
+        self._mixer = MixerComponent(16, 2)
         self._mixer.master_strip().set_volume_control(XFader(name='Master_Volume_Control'))
 
         # tracks volume & pan
