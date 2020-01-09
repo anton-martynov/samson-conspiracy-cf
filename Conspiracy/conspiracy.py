@@ -132,12 +132,12 @@ class Conspiracy(ControlSurface):
     def _create_encoder_modes(self):
         parameter_knobs_matrix = ButtonMatrixElement([self._parameter_knobs])
 
-        self._encoder_modes = ModesComponent(name='Knob Modes', is_enabled=False)
+        self._encoder_modes = ModesComponent(name='Knob Modes')
         self._encoder_modes.add_mode('volume', AddLayerMode(self._mixer, Layer(volume_controls=parameter_knobs_matrix)))
         self._encoder_modes.add_mode('pan', AddLayerMode(self._mixer, Layer(volume_controls=parameter_knobs_matrix)))
         self._encoder_modes.add_mode('send', [
             AddLayerMode(self._mixer, Layer(send_controls=parameter_knobs_matrix)),
-            SendToggleComponent(self._mixer, name='Toggle Send', is_enabled=False, layer=Layer(toggle_button=self._send_button, priority=1))
+            SendToggleComponent(self._mixer, name='Toggle Send', layer=Layer(toggle_button=self._send_button, priority=1))
         ])
         self._encoder_modes.add_mode('device', AddLayerMode(self._mixer, Layer(volume_controls=parameter_knobs_matrix)))
         self._encoder_modes.selected_mode = 'volume'
