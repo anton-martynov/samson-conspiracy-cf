@@ -8,6 +8,34 @@ from .colors import TransportButtonColors
 from .skins import LaunchClipPadSkin, LaunchScenePadSkin, FButtonSkin
 
 
+class Pad(ButtonElement):
+    """ Pad """
+
+    def __init__(self, identifier, skin, *a, **k):
+        ButtonElement.__init__(self, True, MIDI_NOTE_TYPE, 0, identifier, skin, *a, **k)
+
+        self._last_light = None
+        self.add_value_listener(self.__value_listener)
+
+    def disconnect(self):
+        self.remove_value_listener(self.__value_listener)
+
+        ButtonElement.disconnect(self)
+
+    def __value_listener(self, value):
+        if int(value) == 0:  # note off, button released
+            if self._last_light:
+                self.set_light(self._last_light)
+
+    def set_light(self, value):
+        ButtonElement.set_light(self, value)
+        self._last_light = value
+
+    def turn_off(self):
+        ButtonElement.turn_off(self)
+        self._last_light = None
+
+
 class TransportButton(ButtonElement):
     """ Three transport buttons: play, stop, record. Available colors: 0 - off, black; 1 - blue """
 
@@ -74,18 +102,18 @@ class XFader(Slider):
         super(XFader, self).__init__(15, *a, **k)
 
 
-class LaunchScenePad(ButtonElement):
+class LaunchScenePad(Pad):
     """ Pad to launch scene (right (5th) column of pads 05, 10, 15, 20, 25) """
 
     def __init__(self, identifier, *a, **k):
-        ButtonElement.__init__(self, True, MIDI_NOTE_TYPE, 0, identifier, Skin(LaunchScenePadSkin), *a, **k)
+        Pad.__init__(self, identifier, Skin(LaunchScenePadSkin), *a, **k)
 
 
-class LaunchClipPad(ButtonElement):
+class LaunchClipPad(Pad):
     """ Pad to launch clip """
 
     def __init__(self, identifier, *a, **k):
-        ButtonElement.__init__(self, True, MIDI_NOTE_TYPE, 0, identifier, Skin(LaunchClipPadSkin), *a, **k)
+        Pad.__init__(self, identifier, Skin(LaunchClipPadSkin), *a, **k)
 
 
 class FButton(ButtonElement):

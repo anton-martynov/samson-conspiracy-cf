@@ -9,7 +9,7 @@ class LaunchScenePadSkin:
         ClipTriggeredPlay = PadColors.YELLOW
         ClipTriggeredRecord = PadColors.LIGHTBLUE
         ClipEmpty = PadColors.OFF
-        Scene = PadColors.OFF
+        Scene = PadColors.GREEN
         SceneTriggered = PadColors.YELLOW
         NoScene = PadColors.OFF
         StopClip = PadColors.OFF
@@ -25,17 +25,17 @@ class LaunchScenePadSkin:
 
 class LaunchClipPadSkin:
     class Session:
-        ClipStopped = PadColors.OFF
+        ClipStopped = PadColors.LIGHTBLUE
         ClipStarted = PadColors.GREEN
         ClipRecording = PadColors.RED
         ClipTriggeredPlay = PadColors.YELLOW
         ClipTriggeredRecord = PadColors.LIGHTBLUE
         ClipEmpty = PadColors.OFF
-        Scene = PadColors.OFF
+        Scene = PadColors.GREEN
         SceneTriggered = PadColors.YELLOW
         NoScene = PadColors.OFF
         StopClip = PadColors.OFF
-        StopClipTriggered = PadColors.YELLOW
+        StopClipTriggered = PadColors.RED
         RecordButton = PadColors.OFF
 
     class Zooming:

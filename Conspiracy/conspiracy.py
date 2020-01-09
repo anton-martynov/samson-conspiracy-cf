@@ -9,7 +9,6 @@ from _Framework.Resource import SharedResource
 from _Framework.ComboElement import ComboElement
 from _Framework.ModesComponent import ModesComponent, AddLayerMode
 from _Framework.Layer import Layer
-from APC_Key_25.SendToggleComponent import SendToggleComponent
 from .controls import TransportButton, XFader, Slider, LaunchScenePad, LaunchClipPad, NavButton, FButton, Encoder
 
 logger = logging.getLogger('ConspiracySurface')
@@ -32,7 +31,7 @@ class Conspiracy(ControlSurface):
             self._create_transport()
             self._create_mixer()
             self._create_device_component()
-            self._create_encoder_modes()
+            # self._create_encoder_modes()
 
             self._session.set_mixer(self._mixer)
             self.set_highlighting_session_component(self._session)
@@ -135,10 +134,7 @@ class Conspiracy(ControlSurface):
         self._encoder_modes = ModesComponent(name='Knob Modes')
         self._encoder_modes.add_mode('volume', AddLayerMode(self._mixer, Layer(volume_controls=parameter_knobs_matrix)))
         self._encoder_modes.add_mode('pan', AddLayerMode(self._mixer, Layer(volume_controls=parameter_knobs_matrix)))
-        self._encoder_modes.add_mode('send', [
-            AddLayerMode(self._mixer, Layer(send_controls=parameter_knobs_matrix)),
-            SendToggleComponent(self._mixer, name='Toggle Send', layer=Layer(toggle_button=self._send_button, priority=1))
-        ])
+        self._encoder_modes.add_mode('send', AddLayerMode(self._mixer, Layer(volume_controls=parameter_knobs_matrix)))
         self._encoder_modes.add_mode('device', AddLayerMode(self._mixer, Layer(volume_controls=parameter_knobs_matrix)))
         self._encoder_modes.selected_mode = 'volume'
         self._encoder_modes.layer = Layer(volume_button=self._volume_button, pan_button=self._pan_button, send_button=self._send_button, device_button=self._device_button)
