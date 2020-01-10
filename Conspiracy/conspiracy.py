@@ -23,6 +23,8 @@ class Conspiracy(ControlSurface):
     def __init__(self, *a, **k):
         super(Conspiracy, self).__init__(*a, **k)
 
+        self._set_suppress_rebuild_requests(True)
+
         self._suggested_input_port = self._suggested_output_port = 'Conspiracy'
 
         with self.component_guard():
@@ -36,11 +38,12 @@ class Conspiracy(ControlSurface):
             self._session.set_mixer(self._mixer)
             self.set_highlighting_session_component(self._session)
 
+        self._set_suppress_rebuild_requests(False)
+
         logger.info('Surface initialized')
-        return
 
     def _create_controls(self):
-        self._shift_button = TransportButton(self, 40, resource_type=SharedResource, name='Shift_Button')
+        self._shift_button = TransportButton(40, False, resource_type=SharedResource, name='Shift_Button')
 
         self._left_button = NavButton(34, name='Bank_Select_Left_Button')
         self._right_button = NavButton(36, name='Bank_Select_Right_Button')
@@ -52,13 +55,14 @@ class Conspiracy(ControlSurface):
         ]
 
         self._select_buttons = [
-            FButton(25 + i, name='Track_Select_%d' % (i + 1)) for i in xrange(self.SESSION_WIDTH)
+             FButton(25 + i, name='Track_Select_%d' % (i + 1)) for i in xrange(self.SESSION_WIDTH)
         ]
+        self._matrix_select_buttons = ButtonMatrixElement(name='Track_Select_Buttons', rows=[self._select_buttons])
 
-        self._volume_button = ComboElement(self._select_buttons[0], modifiers=[self._shift_button])
-        self._pan_button = ComboElement(self._select_buttons[1], modifiers=[self._shift_button])
-        self._send_button = ComboElement(self._select_buttons[2], modifiers=[self._shift_button])
-        self._device_button = ComboElement(self._select_buttons[3], modifiers=[self._shift_button])
+        # self._volume_button = ComboElement(self._select_buttons[0], modifiers=[self._shift_button])
+        # self._pan_button = ComboElement(self._select_buttons[1], modifiers=[self._shift_button])
+        # self._send_button = ComboElement(self._select_buttons[2], modifiers=[self._shift_button])
+        # self._device_button = ComboElement(self._select_buttons[3], modifiers=[self._shift_button])
 
         self._scene_launch_buttons = [
             LaunchScenePad(4, name='Scene_0_Launch_Button'),
@@ -98,9 +102,8 @@ class Conspiracy(ControlSurface):
 
     def _create_transport(self):
         self._transport = TransportComponent()
-        self._transport.set_play_button(TransportButton(self, 38))
-        self._transport.set_stop_button(TransportButton(self, 39, False))
-        # self._transport.set_record_button(TransportButton(self, 40))
+        self._transport.set_play_button(TransportButton(38))
+        self._transport.set_stop_button(TransportButton(39, False))
 
         logger.info('Transport elements created')
 
@@ -109,18 +112,16 @@ class Conspiracy(ControlSurface):
         self._mixer.master_strip().set_volume_control(XFader(name='Master_Volume_Control'))
 
         # tracks volume & pan
-        self._mixer.channel_strip(0).set_volume_control(Encoder(30))
-        self._mixer.channel_strip(1).set_volume_control(Encoder(31))
-        self._mixer.channel_strip(2).set_volume_control(Encoder(32))
-        self._mixer.channel_strip(3).set_volume_control(Encoder(33))
-        self._mixer.channel_strip(0).set_pan_control(Slider(26))
-        self._mixer.channel_strip(1).set_pan_control(Slider(27))
-        self._mixer.channel_strip(2).set_pan_control(Slider(28))
-        self._mixer.channel_strip(3).set_pan_control(Slider(29))
+        self._mixer.channel_strip(0).set_volume_control(Slider(26))
+        self._mixer.channel_strip(1).set_volume_control(Slider(27))
+        self._mixer.channel_strip(2).set_volume_control(Slider(28))
+        self._mixer.channel_strip(3).set_volume_control(Slider(29))
 
         # return tracks volume
         self._mixer.return_strip(0).set_volume_control(Slider(24))
         self._mixer.return_strip(1).set_volume_control(Slider(25))
+
+        self._mixer.set_track_select_buttons(self._matrix_select_buttons)
 
         logger.info('Mixer elements created')
 
