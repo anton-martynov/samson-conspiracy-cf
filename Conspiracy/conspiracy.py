@@ -1,14 +1,14 @@
 import logging
 
-from _Framework.ControlSurface import ControlSurface
-from _Framework.TransportComponent import TransportComponent
-from _Framework.MixerComponent import MixerComponent
-from _Framework.SessionComponent import SessionComponent
 from _Framework.ButtonMatrixElement import ButtonMatrixElement
-from _Framework.Resource import SharedResource
-from _Framework.ComboElement import ComboElement
-from _Framework.ModesComponent import ModesComponent, AddLayerMode
+from _Framework.ControlSurface import ControlSurface
 from _Framework.Layer import Layer
+from _Framework.MixerComponent import MixerComponent
+from _Framework.ModesComponent import ModesComponent, AddLayerMode
+from _Framework.Resource import SharedResource
+from _Framework.SessionComponent import SessionComponent
+from _Framework.TransportComponent import TransportComponent
+
 from .controls import TransportButton, XFader, Slider, LaunchScenePad, LaunchClipPad, NavButton, FButton, Encoder
 
 logger = logging.getLogger('ConspiracySurface')
