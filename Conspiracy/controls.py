@@ -64,10 +64,20 @@ class TransportButton(ButtonWithRefreshLightAfterNoteOff):
 class FButton(ButtonWithRefreshLightAfterNoteOff):
     """ F-buttons """
 
-    def __init__(self, identifier, *a, **k):
-        ButtonWithRefreshLightAfterNoteOff.__init__(self, identifier, True, *a, **k)
+    def __init__(self, identifier, refresh_after_release=True, *a, **k):
+        ButtonWithRefreshLightAfterNoteOff.__init__(self, identifier, refresh_after_release, *a, **k)
 
         self._color_on = FButtonColors.YELLOW
+        self._color_off = FButtonColors.OFF
+
+
+class TrackNavigationFButton(FButton):
+    """ F-buttons """
+
+    def __init__(self, identifier, *a, **k):
+        FButton.__init__(self, identifier, False, *a, **k)
+
+        self._color_on = FButtonColors.OFF
         self._color_off = FButtonColors.OFF
 
 

@@ -1,6 +1,7 @@
 import logging
 
 from _Framework.ButtonMatrixElement import ButtonMatrixElement
+from _Framework.ComboElement import ComboElement
 from _Framework.ControlSurface import ControlSurface
 from _Framework.Layer import Layer
 from _Framework.MixerComponent import MixerComponent
@@ -9,7 +10,8 @@ from _Framework.Resource import SharedResource
 from _Framework.SessionComponent import SessionComponent
 from _Framework.TransportComponent import TransportComponent
 
-from .controls import TransportButton, XFader, Slider, LaunchScenePad, LaunchClipPad, NavButton, FButton, Encoder
+from .controls import TransportButton, XFader, Slider, LaunchScenePad, LaunchClipPad, NavButton, FButton, Encoder, \
+    TrackNavigationFButton
 
 logger = logging.getLogger('ConspiracySurface')
 
@@ -63,6 +65,11 @@ class Conspiracy(ControlSurface):
         # self._pan_button = ComboElement(self._select_buttons[1], modifiers=[self._shift_button])
         # self._send_button = ComboElement(self._select_buttons[2], modifiers=[self._shift_button])
         # self._device_button = ComboElement(self._select_buttons[3], modifiers=[self._shift_button])
+
+        # self._prev_track_button = TrackNavigationFButton(33)  # F9
+        # self._next_track_button = TrackNavigationFButton(41)  # F10
+        self._prev_track_button = ComboElement(self._left_button, modifiers=[self._shift_button])
+        self._next_track_button = ComboElement(self._right_button, modifiers=[self._shift_button])
 
         self._scene_launch_buttons = [
             LaunchScenePad(4, name='Scene_0_Launch_Button'),
@@ -122,6 +129,7 @@ class Conspiracy(ControlSurface):
         self._mixer.return_strip(1).set_volume_control(Slider(25))
 
         self._mixer.set_track_select_buttons(self._matrix_select_buttons)
+        self._mixer.set_select_buttons(self._next_track_button, self._prev_track_button)
 
         logger.info('Mixer elements created')
 
