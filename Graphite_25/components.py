@@ -23,3 +23,11 @@ class Encoder(EncoderElement):
         self._log.info('AL sends midi message: %s' % message)
 
         EncoderElement.send_midi(self, message)
+
+
+class MidiValues:
+    RWD = 0
+    FFWD = 1
+    STOP = 2
+    PLAY = 3
+    RECORD = 4

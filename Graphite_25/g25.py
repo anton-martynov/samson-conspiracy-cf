@@ -9,7 +9,7 @@ from _Framework.Layer import Layer
 from _Framework.MixerComponent import MixerComponent
 from _Framework.Resource import SharedResource
 from _Framework.TransportComponent import TransportComponent
-from .components import Encoder
+from .components import Encoder, MidiValues
 
 
 class G25(ControlSurface):
@@ -21,7 +21,7 @@ class G25(ControlSurface):
         self._set_suppress_rebuild_requests(True)
         with self.component_guard():
             self._common_channel = 0
-            self._shift_button = ButtonElement(True, MIDI_NOTE_TYPE, self._common_channel, 114, resource_type=SharedResource, name='Shift_Button')  # RECORD button
+            self._shift_button = ButtonElement(True, MIDI_NOTE_TYPE, self._common_channel, MidiValues.RECORD, resource_type=SharedResource, name='Shift_Button')  # RECORD button
             self._init_transport_component()
             self._init_mixer_component()
             self._init_device_component()
@@ -63,16 +63,16 @@ class G25(ControlSurface):
         self._mixer = MixerComponent(16, 2)
         # self._mixer.master_strip().set_volume_control(self._master_volume_control)
 
-        self._next_track_button = ButtonElement(True, MIDI_NOTE_TYPE, self._common_channel, 117)  # Transport, FFWD Button
-        self._prev_track_button = ButtonElement(True, MIDI_NOTE_TYPE, self._common_channel, 116)  # Transport, RWD Button
+        self._next_track_button = ButtonElement(True, MIDI_NOTE_TYPE, self._common_channel, MidiValues.FFWD)
+        self._prev_track_button = ButtonElement(True, MIDI_NOTE_TYPE, self._common_channel, MidiValues.RWD)
         self._mixer.set_select_buttons(self._next_track_button, self._prev_track_button)
 
     def _init_transport_component(self):
         def make_transport_button(note_id, name):
             return ButtonElement(True, MIDI_NOTE_TYPE, self._common_channel, note_id, name=name)
 
-        layer_specs = {'stop_button': make_transport_button(118, 'Stop_Button'),
-                       'play_button': make_transport_button(119, 'Play_Button'),
+        layer_specs = {'stop_button': make_transport_button(MidiValues.STOP, 'Stop_Button'),
+                       'play_button': make_transport_button(MidiValues.PLAY, 'Play_Button'),
                        # used as Shift button 'record_button': make_transport_button(114, 'Record_Button'),
                        # used as Prev Track or Prev Device (with Shift) 'seek_backward_button': make_transport_button(116, 'Rwd_Button'),
                        # used as Next Track or Next Device (with Shift) 'seek_forward_button': make_transport_button(117, 'FFwd_Button')
