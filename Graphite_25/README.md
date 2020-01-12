@@ -1,4 +1,21 @@
-I used CC/Note values from factory preset #23. 
+I used CC/Note values from factory preset #23.
+
+The RECORD button used as Shift.
+| Control | Action             | With Shift |
+| ------- | ------------------ | ---------- |
+| RWD     | Select Prev Track  |            |
+| FFWD    | Select Next Track  |            |
+| STOP    | Transport: Stop    |            |
+| PLAY    | Transport: Play    |            |
+| E1      |                    |            |
+| E2      |                    |            |
+| E3      |                    |            |
+| E4      |                    |            |
+| E5      |                    |            |
+| E6      |                    |            |
+| E7      |                    |            |
+| E8      |                    |            |
+ 
 
 #### Transport buttons
 | Button | Channel, Port | Type (CC = 0, Note = 1) | Value | Mode (0 = Toggle, 1 = Momentary) |
