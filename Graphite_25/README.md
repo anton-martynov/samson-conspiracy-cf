@@ -1,6 +1,7 @@
 I used CC/Note values from factory preset #23.
 
 The RECORD button used as Shift.
+
 | Control | Action             | With Shift |
 | ------- | ------------------ | ---------- |
 | RWD     | Select Prev Track  |            |
