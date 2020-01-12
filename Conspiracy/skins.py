@@ -29,7 +29,7 @@ class LaunchClipPadSkin:
         ClipStarted = PadColors.GREEN
         ClipRecording = PadColors.RED
         ClipTriggeredPlay = PadColors.YELLOW
-        ClipTriggeredRecord = PadColors.LIGHTBLUE
+        ClipTriggeredRecord = PadColors.PURPLE
         ClipEmpty = PadColors.OFF
         Scene = PadColors.GREEN
         SceneTriggered = PadColors.YELLOW
@@ -46,6 +46,10 @@ class LaunchClipPadSkin:
 
 
 class FButtonSkin:
+    class Mixer:
+        TrackSelected = FButtonColors.YELLOW
+        TrackUnselected = FButtonColors.OFF
+
     class Session:
-        StopClip = FButtonColors.OFF
-        StopClipTriggered = FButtonColors.YELLOW
+        TrackSelected = FButtonColors.YELLOW
+        TrackUnselected = FButtonColors.OFF
