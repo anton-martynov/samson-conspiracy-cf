@@ -5,13 +5,6 @@ from _Framework.EncoderElement import EncoderElement
 from _Framework.InputControlElement import MIDI_CC_TYPE
 
 
-class Slider(EncoderElement):
-    """ SYSEX (127, 127, 4, 1) + value """
-
-    def __init__(self):
-        EncoderElement.__init__(self, MIDI_CC_TYPE, 0, 121, Live.MidiMap.MapMode.absolute)  # 121 - unused CC
-
-
 class Encoder(EncoderElement):
 
     def __init__(self, channel, cc_identifier, name):

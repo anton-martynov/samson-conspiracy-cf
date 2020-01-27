@@ -9,7 +9,7 @@ from _Framework.Layer import Layer
 from _Framework.MixerComponent import MixerComponent
 from _Framework.Resource import SharedResource
 from _Framework.TransportComponent import TransportComponent
-from .components import Encoder, MidiValues, Slider
+from .components import Encoder, MidiValues
 
 
 class G25(ControlSurface):
