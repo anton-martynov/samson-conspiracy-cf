@@ -1,5 +1,7 @@
 The RECORD button used as Shift.
 
+The S1 slider controls volume of master track.
+
 | Control | Action             | With Shift |
 | ------- | ------------------ | ---------- |
 | RWD     | Select Prev Track  |            |
