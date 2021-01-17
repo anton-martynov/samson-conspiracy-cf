@@ -1,0 +1,13 @@
+task copyConspiracy(type: Copy) {
+    from 'Conspiracy'
+    into "${System.env.AbletonLive_InstallPath}/Resources/MIDI Remote Scripts/Conspiracy"
+
+    description 'Copy all files from the ./Conspiracy directory to the \"MIDI Remote Scripts/Conspiracy\" directory. ' +
+            'The ${System.env.AbletonLive_InstallPath} property is required' + " // AbletonLive_InstallPath = '${System.env.AbletonLive_InstallPath}'"
+    group 'Conspiracy'
+}
+
+task cc(dependsOn: copyConspiracy) {
+    description 'Alias for the copyConspiracy task'
+    group 'Conspiracy'
+}

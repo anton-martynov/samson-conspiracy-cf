@@ -1,17 +1,15 @@
 import logging
 
+from _APC.DetailViewCntrlComponent import DetailViewCntrlComponent
 from _Framework.ButtonMatrixElement import ButtonMatrixElement
-from _Framework.ComboElement import ComboElement
 from _Framework.ControlSurface import ControlSurface
+from _Framework.DeviceComponent import DeviceComponent
 from _Framework.Layer import Layer
 from _Framework.MixerComponent import MixerComponent
-from _Framework.ModesComponent import ModesComponent, AddLayerMode
-from _Framework.Resource import SharedResource
+from _Framework.Resource import PrioritizedResource
 from _Framework.SessionComponent import SessionComponent
 from _Framework.TransportComponent import TransportComponent
-
-from .controls import TransportButton, XFader, Slider, LaunchScenePad, LaunchClipPad, NavButton, FButton, Encoder, \
-    TrackNavigationFButton
+from .controls import TransportButton, XFader, Slider, LaunchScenePad, LaunchClipPad, NavButton, FButton, Encoder, DeviceFButton
 
 logger = logging.getLogger('ConspiracySurface')
 
@@ -25,8 +23,6 @@ class Conspiracy(ControlSurface):
     def __init__(self, *a, **k):
         super(Conspiracy, self).__init__(*a, **k)
 
-        self._set_suppress_rebuild_requests(True)
-
         self._suggested_input_port = self._suggested_output_port = 'Conspiracy'
 
         with self.component_guard():
@@ -35,117 +31,132 @@ class Conspiracy(ControlSurface):
             self._create_transport()
             self._create_mixer()
             self._create_device_component()
-            # self._create_encoder_modes()
+            self._create_detail_view_control()
 
             self._session.set_mixer(self._mixer)
+            self.set_device_component(self._device)
             self.set_highlighting_session_component(self._session)
-
-        self._set_suppress_rebuild_requests(False)
 
         logger.info('Surface initialized')
 
-    def _create_controls(self):
-        self._shift_button = TransportButton(40, False, resource_type=SharedResource, name='Shift_Button')
+    def _create_real_controls(self):
+        # transport section
+        self._play_button = TransportButton(38)
+        self._stop_button = TransportButton(39, False)
+        self._shift_button = TransportButton(40, False, resource_type=PrioritizedResource)  # 40 - Record
 
-        self._left_button = NavButton(34, name='Bank_Select_Left_Button')
-        self._right_button = NavButton(36, name='Bank_Select_Right_Button')
-        self._up_button = NavButton(35, name='Bank_Select_Up_Button')
-        self._down_button = NavButton(37, name='Bank_Select_Down_Button')
+        # navigation
+        self._left_button = NavButton(34)
+        self._right_button = NavButton(36)
+        self._up_button = NavButton(35)
+        self._down_button = NavButton(37)
 
+        # encoders, E1 .. E8
         self._parameter_knobs = [
-            Encoder(16 + i, name='Parameter_Knob_%d' % (i + 1)) for i in xrange(8)
+            Encoder(16 + i % (i + 1)) for i in xrange(8)
         ]
 
+        # F1 - F4, tracks select
         self._select_buttons = [
-             FButton(25 + i, name='Track_Select_%d' % (i + 1)) for i in xrange(self.SESSION_WIDTH)
+            FButton(25 + i % (i + 1)) for i in xrange(self.SESSION_WIDTH)
         ]
-        self._matrix_select_buttons = ButtonMatrixElement(name='Track_Select_Buttons', rows=[self._select_buttons])
 
-        # self._volume_button = ComboElement(self._select_buttons[0], modifiers=[self._shift_button])
-        # self._pan_button = ComboElement(self._select_buttons[1], modifiers=[self._shift_button])
-        # self._send_button = ComboElement(self._select_buttons[2], modifiers=[self._shift_button])
-        # self._device_button = ComboElement(self._select_buttons[3], modifiers=[self._shift_button])
+        # F5 - F8
+        self._button_f5 = DeviceFButton(29)
+        self._button_f6 = DeviceFButton(30)
+        self._button_f7 = DeviceFButton(31)
+        self._button_f8 = DeviceFButton(32)
 
-        # self._prev_track_button = TrackNavigationFButton(33)  # F9
-        # self._next_track_button = TrackNavigationFButton(41)  # F10
-        self._prev_track_button = ComboElement(self._left_button, modifiers=[self._shift_button])
-        self._next_track_button = ComboElement(self._right_button, modifiers=[self._shift_button])
+        # F9, F10
+        # self._button_f9 = FButton(33)
+        self._button_f10 = FButton(41)
 
+        # 5 / 25 pads, right column
         self._scene_launch_buttons = [
-            LaunchScenePad(4, name='Scene_0_Launch_Button'),
-            LaunchScenePad(9, name='Scene_1_Launch_Button'),
-            LaunchScenePad(14, name='Scene_2_Launch_Button'),
-            LaunchScenePad(19, name='Scene_3_Launch_Button'),
-            LaunchScenePad(24, name='Scene_4_Launch_Button')
+            LaunchScenePad(4),
+            LaunchScenePad(9),
+            LaunchScenePad(14),
+            LaunchScenePad(19),
+            LaunchScenePad(24)
         ]
-        self._scene_launch_buttons = ButtonMatrixElement(name='Scene_Launch_Buttons', rows=[self._scene_launch_buttons])
 
-        self._matrix_buttons = [
-            [
-                LaunchClipPad(scene * 5 + track, name='%d_Clip_%d_Button' % (track, scene)) for track in xrange(self.SESSION_WIDTH) ] for scene in xrange(self.SESSION_HEIGHT)
-            ]
+        # 20 / 25 pads
+        self._matrix_buttons = [ [ LaunchClipPad(scene * 5 + track) for track in xrange(self.SESSION_WIDTH) ] for scene in xrange(self.SESSION_HEIGHT) ]
 
-        self._session_matrix = ButtonMatrixElement(name='Button_Matrix', rows=self._matrix_buttons)
+        # sliders S1 .. S6
+        self._sliders = [
+            Slider(26),
+            Slider(27),
+            Slider(28),
+            Slider(29),
+            Slider(24),
+            Slider(25)
+        ]
+
+        self._crossfader_control = XFader()
+        self._prehear_volume_control = Encoder(35)
+
+    def _created_shifted_controls(self):
+        pass
+
+    def _create_controls(self):
+        self._create_real_controls()
+        self._created_shifted_controls()
+
+        self._matrix_select_buttons = ButtonMatrixElement(rows=[self._select_buttons])
+        self._scene_launch_buttons = ButtonMatrixElement(rows=[self._scene_launch_buttons])
+        self._session_matrix = ButtonMatrixElement(rows=self._matrix_buttons)
 
         logger.info('Controls created')
 
     def _create_session(self):
-        self._session = SessionComponent(self.SESSION_WIDTH, self.SESSION_HEIGHT, name='Session_Control', auto_name=True, enable_skinning=True)
+        self._session = SessionComponent(self.SESSION_WIDTH, self.SESSION_HEIGHT, auto_name=True, enable_skinning=True, is_enabled=False)
         self._session.set_clip_launch_buttons(self._session_matrix)
         self._session.set_scene_launch_buttons(self._scene_launch_buttons)
-
         self._session.set_track_bank_left_button(self._left_button)
         self._session.set_track_bank_right_button(self._right_button)
         self._session.set_scene_bank_up_button(self._up_button)
         self._session.set_scene_bank_down_button(self._down_button)
+        self._session.set_enabled(True)
 
-        for scene_index in xrange(self.SESSION_HEIGHT):
-            scene = self._session.scene(scene_index)
-            for track_index in xrange(self.SESSION_WIDTH):
-                clip_slot = scene.clip_slot(track_index)
-                clip_slot.name = '%d_Clip_Slot_%d' % (track_index, scene_index)
-
-        logger.info('Session created')
+        logger.info('SessionComponent created')
 
     def _create_transport(self):
         self._transport = TransportComponent()
-        self._transport.set_play_button(TransportButton(38))
-        self._transport.set_stop_button(TransportButton(39, False))
+        self._transport.set_play_button(self._play_button)
+        self._transport.set_stop_button(self._stop_button)
 
-        logger.info('Transport elements created')
+        logger.info('Transport created')
 
     def _create_mixer(self):
-        self._mixer = MixerComponent(16, 2)
-        self._mixer.master_strip().set_volume_control(XFader(name='Master_Volume_Control'))
+        self._mixer = MixerComponent(4, auto_name=True, is_enabled=False)
+        self._mixer.master_strip().set_volume_control(self._sliders[5])  # Slider 6
+        self._mixer.master_strip().set_select_button(self._button_f10)
 
-        # tracks volume & pan
-        self._mixer.channel_strip(0).set_volume_control(Slider(26))
-        self._mixer.channel_strip(1).set_volume_control(Slider(27))
-        self._mixer.channel_strip(2).set_volume_control(Slider(28))
-        self._mixer.channel_strip(3).set_volume_control(Slider(29))
-
-        # return tracks volume
-        self._mixer.return_strip(0).set_volume_control(Slider(24))
-        self._mixer.return_strip(1).set_volume_control(Slider(25))
+        # tracks volume
+        self._mixer.channel_strip(0).set_volume_control(self._sliders[0])  # Slider 1
+        self._mixer.channel_strip(1).set_volume_control(self._sliders[1])  # Slider 2
+        self._mixer.channel_strip(2).set_volume_control(self._sliders[2])  # Slider 3
+        self._mixer.channel_strip(3).set_volume_control(self._sliders[3])  # Slider 4
 
         self._mixer.set_track_select_buttons(self._matrix_select_buttons)
-        self._mixer.set_select_buttons(self._next_track_button, self._prev_track_button)
+        self._mixer.set_crossfader_control(self._crossfader_control)
+        self._mixer.set_prehear_volume_control(self._prehear_volume_control)
 
-        logger.info('Mixer elements created')
+        self._mixer.set_enabled(True)
+
+        logger.info('MixerComponent created')
 
     def _create_device_component(self):
-        # self._device =
-        pass
+        self._device = DeviceComponent(is_enabled=False, device_selection_follows_track_selection=True)
+        self._device.set_parameter_controls(tuple(self._parameter_knobs))
+        self._device.set_bank_nav_buttons(self._button_f7, self._button_f8)
+        self._device.set_enabled(True)
 
-    def _create_encoder_modes(self):
-        parameter_knobs_matrix = ButtonMatrixElement([self._parameter_knobs])
+        logger.info('DeviceComponent created')
 
-        self._encoder_modes = ModesComponent(name='Knob Modes')
-        self._encoder_modes.add_mode('volume', AddLayerMode(self._mixer, Layer(volume_controls=parameter_knobs_matrix)))
-        self._encoder_modes.add_mode('pan', AddLayerMode(self._mixer, Layer(volume_controls=parameter_knobs_matrix)))
-        self._encoder_modes.add_mode('send', AddLayerMode(self._mixer, Layer(volume_controls=parameter_knobs_matrix)))
-        self._encoder_modes.add_mode('device', AddLayerMode(self._mixer, Layer(volume_controls=parameter_knobs_matrix)))
-        self._encoder_modes.selected_mode = 'volume'
-        self._encoder_modes.layer = Layer(volume_button=self._volume_button, pan_button=self._pan_button, send_button=self._send_button, device_button=self._device_button)
+    def _create_detail_view_control(self):
+        self._detail_view_toggler = DetailViewCntrlComponent(is_enabled=False, layer=Layer(device_nav_left_button=self._button_f5, device_nav_right_button=self._button_f6))
+        self._detail_view_toggler.set_enabled(True)
 
-        return
+        logger.info('DetailViewCntrl created')

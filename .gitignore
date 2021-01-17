@@ -1,2 +1,11 @@
 /.idea/
 *.iml
+
+/readme-local.txt
+
+/.gradle/
+/gradle/
+/gradlew
+/gradlew.bat
+
+**/Backup/

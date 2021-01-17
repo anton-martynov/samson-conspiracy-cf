@@ -6,7 +6,7 @@ from _Framework.EncoderElement import EncoderElement
 from _Framework.InputControlElement import MIDI_NOTE_TYPE, MIDI_CC_TYPE
 
 from .colors import TransportButtonColors, FButtonColors
-from .skins import LaunchClipPadSkin, LaunchScenePadSkin
+from .skins import LaunchClipPadSkin, LaunchScenePadSkin, SelectModeButtonSkin, DeviceFButtonSkin
 
 
 class ControlWithRefreshLightAfterNoteOff(ButtonElement):
@@ -16,6 +16,8 @@ class ControlWithRefreshLightAfterNoteOff(ButtonElement):
 
         if self._refresh_after_release:
             self.add_value_listener(self.__value_listener)
+
+        self.set_report_values(False, False)
 
     def disconnect(self):
         if self._refresh_after_release:
@@ -29,6 +31,21 @@ class ControlWithRefreshLightAfterNoteOff(ButtonElement):
 
     def refresh_after_release(self):
         pass
+
+    def _report_value(self, value, is_input):
+        self._verify_value(value)
+        message = str(self.__class__.__name__) + u' ('
+        if self._msg_type == MIDI_NOTE_TYPE:
+            message += u'Note ' + str(self._msg_identifier) + u', '
+        elif self._msg_type == MIDI_CC_TYPE:
+            message += u'CC ' + str(self._msg_identifier) + u', '
+        else:
+            message += u'PB '
+        message += u'Chan. ' + str(self._msg_channel)
+        message += u') '
+        message += u'received value ' if is_input else u'sent value '
+        message += str(value)
+        logging.getLogger(str(self.__class__.__name__)).info(message)
 
 
 class ButtonWithRefreshLightAfterNoteOff(ControlWithRefreshLightAfterNoteOff):
@@ -71,6 +88,24 @@ class FButton(ButtonWithRefreshLightAfterNoteOff):
         self._color_off = FButtonColors.OFF
 
 
+class DeviceFButton(ControlWithRefreshLightAfterNoteOff):
+    """ F5, F6 - prev/next device navigation """
+    def __init__(self, identifier, *a, **k):
+        ControlWithRefreshLightAfterNoteOff.__init__(self, identifier, Skin(DeviceFButtonSkin), True, *a, **k)
+
+    def set_light(self, value):
+        logging.getLogger(str(self.__class__.__name__)).info("set_light:" + str(value))
+        ControlWithRefreshLightAfterNoteOff.set_light(self, value)
+
+    def turn_off(self):
+        logging.getLogger(str(self.__class__.__name__)).info("turn_off")
+        ControlWithRefreshLightAfterNoteOff.turn_off(self)
+
+    def turn_on(self):
+        logging.getLogger(str(self.__class__.__name__)).info("turn_on")
+        ControlWithRefreshLightAfterNoteOff.turn_on(self)
+
+
 class TrackNavigationFButton(FButton):
     """ F-buttons """
 
@@ -106,9 +141,25 @@ class Encoder(EncoderElement):
 
     def __init__(self, identifier, *a, **k):
         super(Encoder, self).__init__(MIDI_CC_TYPE, 0, identifier, Live.MidiMap.MapMode.absolute, *a, **k)
+        self.set_report_values(False, False)
+
+    def _report_value(self, value, is_input):
+        self._verify_value(value)
+        message = str(self.__class__.__name__) + u' ('
+        if self._msg_type == MIDI_NOTE_TYPE:
+            message += u'Note ' + str(self._msg_identifier) + u', '
+        elif self._msg_type == MIDI_CC_TYPE:
+            message += u'CC ' + str(self._msg_identifier) + u', '
+        else:
+            message += u'PB '
+        message += u'Chan. ' + str(self._msg_channel)
+        message += u') '
+        message += u'received value ' if is_input else u'sent value '
+        message += str(value)
+        logging.getLogger().info(message)
 
 
-class XFader(Slider):
+class XFader(Encoder):
     """ Crossfader """
 
     def __init__(self, *a, **k):
@@ -135,7 +186,7 @@ class PadWithRefreshLightAfterNoteOff(ControlWithRefreshLightAfterNoteOff):
 
 
 class LaunchScenePad(PadWithRefreshLightAfterNoteOff):
-    """ Pad to launch scene (right (5th) column of pads 05, 10, 15, 20, 25) """
+    """ Pad to launch scene (right (5th) column of pads) """
 
     def __init__(self, identifier, *a, **k):
         PadWithRefreshLightAfterNoteOff.__init__(self, identifier, Skin(LaunchScenePadSkin), *a, **k)
@@ -146,3 +197,8 @@ class LaunchClipPad(PadWithRefreshLightAfterNoteOff):
 
     def __init__(self, identifier, *a, **k):
         PadWithRefreshLightAfterNoteOff.__init__(self, identifier, Skin(LaunchClipPadSkin), *a, **k)
+
+
+class SelectModeButton(PadWithRefreshLightAfterNoteOff):
+    def __init__(self, identifier, *a, **k):
+        PadWithRefreshLightAfterNoteOff.__init__(self, identifier, Skin(SelectModeButtonSkin), *a, **k)

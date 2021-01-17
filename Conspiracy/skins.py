@@ -3,21 +3,21 @@ from .colors import PadColors, FButtonColors
 
 class LaunchScenePadSkin:
     class Session:
-        ClipStopped = PadColors.OFF
+        ClipStopped = PadColors.YELLOW
         ClipStarted = PadColors.GREEN
         ClipRecording = PadColors.RED
-        ClipTriggeredPlay = PadColors.YELLOW
-        ClipTriggeredRecord = PadColors.LIGHTBLUE
+        ClipTriggeredPlay = PadColors.GREEN_BLINK
+        ClipTriggeredRecord = PadColors.RED_BLINK
         ClipEmpty = PadColors.OFF
-        Scene = PadColors.GREEN
-        SceneTriggered = PadColors.YELLOW
+        Scene = PadColors.OFF
+        SceneTriggered = PadColors.GREEN_BLINK
         NoScene = PadColors.OFF
         StopClip = PadColors.OFF
-        StopClipTriggered = PadColors.YELLOW
+        StopClipTriggered = PadColors.GREEN_BLINK
         RecordButton = PadColors.OFF
 
     class Zooming:
-        Selected = PadColors.PURPLE
+        Selected = PadColors.YELLOW
         Stopped = PadColors.RED
         Playing = PadColors.GREEN
         Empty = PadColors.OFF
@@ -25,18 +25,19 @@ class LaunchScenePadSkin:
 
 class LaunchClipPadSkin:
     class Session:
-        ClipStopped = PadColors.LIGHTBLUE
+        Scene = PadColors.GREEN
+        SceneTriggered = PadColors.LIGHTBLUE  # PadColors.GREEN_BLINK
+        NoScene = PadColors.OFF
+        ClipStopped = PadColors.YELLOW
         ClipStarted = PadColors.GREEN
         ClipRecording = PadColors.RED
-        ClipTriggeredPlay = PadColors.YELLOW
-        ClipTriggeredRecord = PadColors.PURPLE
+        ClipTriggeredPlay = PadColors.GREEN_BLINK
+        ClipTriggeredRecord = PadColors.RED_BLINK
         ClipEmpty = PadColors.OFF
-        Scene = PadColors.GREEN
-        SceneTriggered = PadColors.YELLOW
-        NoScene = PadColors.OFF
+        RecordButton = PadColors.RED
         StopClip = PadColors.OFF
-        StopClipTriggered = PadColors.RED
-        RecordButton = PadColors.OFF
+        StopClipTriggered = PadColors.RED_BLINK
+        StoppedClip = PadColors.LIGHTBLUE
 
     class Zooming:
         Selected = PadColors.PURPLE
@@ -53,3 +54,21 @@ class FButtonSkin:
     class Session:
         TrackSelected = FButtonColors.YELLOW
         TrackUnselected = FButtonColors.OFF
+
+    class DefaultButton:
+        On = FButtonColors.YELLOW
+        Off = FButtonColors.OFF
+        Disabled = FButtonColors.OFF
+
+
+class SelectModeButtonSkin:
+    class Session:
+        StopClip = FButtonColors.GREEN
+        StopClipTriggered = FButtonColors.YELLOW
+
+
+class DeviceFButtonSkin:
+    class DefaultButton:
+        On = FButtonColors.YELLOW
+        Off = FButtonColors.OFF
+        Disabled = FButtonColors.OFF
